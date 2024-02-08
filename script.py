@@ -88,45 +88,44 @@ pd.set_option('display.max_columns', None)
 for col, options in column_options.items():
     pd.set_option(f"display.max_colwidth", options['max_colwidth'])
 
-
     
-dados_numericos = [col.strip() for col in dados_numericos] # Remover espaços em branco dos nomes das colunas em dados_numericos
-df_merged.columns = df_merged.columns.str.strip() # Remover espaços em branco do índice do df_merged
+dados_numericos = [col.strip() for col in dados_numericos] # Remove os espaços em branco dos nomes das colunas em dados_numericos
+df_merged.columns = df_merged.columns.str.strip() # Remove os espaços em branco do índice do df_merged
 
-# Inicialize o objeto SimpleImputer para preencher os valores ausentes com a média
+# Inicializa o objeto SimpleImputer para preencher os valores ausentes com a média
 imputer = SimpleImputer(strategy='mean')
 
-# Ajuste o imputer aos seus dados originais
+# Ajusta o imputer aos seus dados originais
 imputer.fit(df_merged[dados_numericos])
 
-# Preencha os valores ausentes com a média
+# Preenche os valores ausentes com a média
 df_merged[dados_numericos] = imputer.transform(df_merged[dados_numericos])
 
-# Inicialize o objeto PCA com o número desejado de componentes
-num_componentes = 3  # Escolha o número de componentes desejado
+# Inicializa o objeto PCA com o número desejado de componentes
+num_componentes = 3  # Escolhe o número de componentes desejado
 pca = PCA(n_components=num_componentes)
 
-# Ajuste o modelo PCA aos seus dados originais
+# Ajusta o modelo PCA aos seus dados originais
 pca.fit(df_merged[dados_numericos])
 
-# Transforme os seus dados originais no novo espaço de características definido pelas componentes principais
+# Transforma os seus dados originais no novo espaço de características definido pelas componentes principais
 dados_transformados = pca.transform(df_merged[dados_numericos])
 
-# Instanciar o objeto PCA
+# Instancia o objeto PCA
 pca = PCA()
 
-# Aplicar o PCA aos dados
+# Aplica o PCA aos dados
 pca.fit(df_merged[dados_numericos])
 
-# Reduzir a dimensionalidade dos dados
+# Reduz a dimensionalidade dos dados
 df_reduced = pca.transform(df_merged[dados_numericos])
 
-# Calcular a variância explicada acumulada
+# Calcula a variância explicada acumulada
 explained_variance_ratio_cumulative = pca.explained_variance_ratio_.cumsum()
 
 #CARGA
 
-# Plotar a variância explicada acumulada
+# Plota a variância explicada acumulada
 plt.plot(range(1, len(explained_variance_ratio_cumulative) + 1), explained_variance_ratio_cumulative, marker='o')
 plt.xlabel('Número de componentes principais')
 plt.ylabel('Variância explicada acumulada')
@@ -134,8 +133,8 @@ plt.title('Variância explicada acumulada pelos componentes principais')
 plt.grid(True)
 plt.show()
 
-# Visualizar os dados reduzidos em um gráfico de dispersão bidimensional
-plt.scatter(df_reduced[:, 0], df_reduced[:, 2])
+# Visualiza os dados reduzidos em um gráfico de dispersão bidimensional
+plt.scatter(df_reduced[:, 1], df_reduced[:, 2])
 plt.xlabel('Componente principal 1')
 plt.ylabel('Componente principal 2')
 plt.title('Dados reduzidos pelos componentes principais')
